@@ -2,14 +2,10 @@ package com.shortenURL.demo.service;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class UrlService {
-    long timestamp = System.currentTimeMillis();
     //claim an empty map to store original url and shorten url
     Map urlMap = new HashMap<String, String>();
 
@@ -26,18 +22,21 @@ public class UrlService {
 
     //create unique short code
     private String createUniqueCode(String originalURL) {
+        long timestamp = System.currentTimeMillis();
         String uniqueCode = "";
         String regex = "(http://|https://|www\\.|\\.com|\\W)";
         String regretURL = originalURL.replaceAll(regex, "");
         char[] urlCharArray = regretURL.toCharArray();
         Random random = new Random();
-        String base62String = Long.toString(timestamp, 62);
+//        String base62String = Long.toString(timestamp, 62);
+        byte[] encodeTimestamp = Base64.getEncoder().encode(String.valueOf(timestamp).getBytes());
         int num = 0;
         while (num < 5) {
             uniqueCode = uniqueCode + urlCharArray[random.nextInt(urlCharArray.length)];
             num++;
         }
-        uniqueCode = uniqueCode + base62String;
+        uniqueCode = uniqueCode + new String(encodeTimestamp);
+//        uniqueCode = uniqueCode + encodeTimestamp.toString();
         return uniqueCode;
     }
 
