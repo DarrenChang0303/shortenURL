@@ -40,4 +40,32 @@ public class UrlService {
         return uniqueCode;
     }
 
+    public String redirect(String shortURL) {
+        System.out.println("Size:"+urlMap.size());
+        System.out.println("values"+urlMap.values());
+        System.out.println("short:"+shortURL);
+        if (!urlMap.containsValue(shortURL)) {
+            return null;
+        } else {
+            return getKeyByValue(shortURL);
+        }
+    }
+
+    public String getKeyByValue(String shortURL) {
+        Set<String> keySet = urlMap.keySet();
+        String originalURL = null;
+        for (String key : keySet) {
+            if (urlMap.get(key).equals(shortURL)) {
+                originalURL = key;
+                System.out.println("In for"+originalURL);
+                break;
+            }
+        }
+        System.out.println("Out for"+originalURL);
+        return originalURL;
+    }
+
+    public Map showID() {
+        return urlMap;
+    }
 }
